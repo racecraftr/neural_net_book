@@ -1,6 +1,10 @@
 import time
 
+import nnfs
+from nnfs.datasets import spiral_data
+
 from ops.activation import *
+from ops.layer import Layer_Dropout
 from ops.loss import *
 from ops.optimizer import *
 
@@ -22,7 +26,7 @@ activation2 = ActivationSigmoid()
 
 loss_function = LossBinCrossEntropy()
 
-optimizer = Optimizer_Adam(learning_rate=0.03, decay=5e-7)
+optimizer = OptimizerAdam(learning_rate=0.03, decay=5e-7)
 
 loss_activation = ASLCC()
 
@@ -32,14 +36,14 @@ t1 = time.time()
 
 for epoch in range(10001):
     # forward pass
-    dense1.forward(X)
-    activation1.forward(dense1.output)
+    dense1.forward(X, training=True)
+    activation1.forward(dense1.output, training=True)
     # dropout1.forward(activation1.output)
-    dense2.forward(activation1.output)
-    activation2.forward(dense2.output)
+    dense2.forward(activation1.output, training=True)
+    activation2.forward(dense2.output, traning=True)
 
     data_loss = loss_function.calculate(activation2.output, y)
-    reg_loss = loss_function.reg_loss(dense1) + loss_function.reg_loss(dense2)
+    reg_loss = loss_function.reg_loss() + loss_function.reg_loss()
 
     loss = data_loss
     # print(loss_activation.output[5])
@@ -80,9 +84,9 @@ print('training time:', t2-t1)
 X_test, y_test = spiral_data(samples=100, classes=2)
 y_test = y_test.reshape(-1, 1)
 
-dense1.forward(X_test)
-activation1.forward(dense1.output)
-dense2.forward(activation1.output)
+dense1.forward(X_test, training=False)
+activation1.forward(dense1.output, training=False)
+dense2.forward(activation1.output, training=False)
 loss = loss_function.calculate(dense2.output, y_test)
 
 predictions = (activation2.output > 0.5) * 1

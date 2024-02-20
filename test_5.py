@@ -4,8 +4,10 @@ from ops.accuracy import AccuracyCategorical
 from ops.activation import *
 from ops.layer import LayerDense
 from ops.loss import LossCatCrossEntropy
-from ops.optimizer import Optimizer_Adam
+from ops.optimizer import OptimizerAdam
 
+# to get mnist data, download zip file here: 'https://nnfs.io/datasets/fashion_mnist_images.zip'
+# you may need to use p7zip (7za.exe) to unzip it.
 X, y, X_test, y_test = loading.create_data_mnist('fashion_mnist_images')
 
 keys = np.array(range(X.shape[0]))
@@ -27,7 +29,7 @@ model.add(ActivationSoftmax())
 
 model.set(
     loss=LossCatCrossEntropy(),
-    optimizer=Optimizer_Adam(decay=5e-5),  # make sure that the learning rate is low by default or is set to be low.
+    optimizer=OptimizerAdam(decay=5e-5),  # make sure that the learning rate is low by default or is set to be low.
     acc=AccuracyCategorical()
 )
 

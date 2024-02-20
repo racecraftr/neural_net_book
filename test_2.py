@@ -3,7 +3,7 @@ import nnfs
 from nnfs.datasets import vertical_data
 from ops.layer import LayerDense
 from ops.activation import ActivationReLU
-from ops.softmax import ActivationSoftmax
+from ops.activation import ActivationSoftmax
 from ops.loss import LossCatCrossEntropy
 
 nnfs.init()
@@ -32,10 +32,10 @@ for iteration in range(10000):
     dense2.weights += 0.05 * np.random.randn(3, 3)
     dense2.biases = 0.05 * np.random.randn(1, 3)
 
-    dense1.forward(X)
-    activation1.forward(dense1.output)
-    dense2.forward(activation1.output)
-    activation2.forward(dense2.output)
+    dense1.forward(X, training=True)
+    activation1.forward(dense1.output, training=True)
+    dense2.forward(activation1.output, training=True)
+    activation2.forward(dense2.output, training=True)
 
     loss = loss_function.calculate(activation1.output, y)
 

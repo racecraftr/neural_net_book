@@ -3,7 +3,7 @@ import numpy as np
 from ops.layer import LayerDense
 
 
-class Optimizer_SDG:
+class OptimizerSDG:
     def __init__(self, learning_rate=1.0, decay=0, momentum=0):
         self.momentum = momentum
         self.learning_rate = learning_rate
@@ -46,7 +46,7 @@ class Optimizer_SDG:
 
 # -----------------------------------------------------------------------------------------------------------------------
 
-class Optimizer_Adagrad:
+class OptimizerAdagrad:
     def __init__(self, learning_rate=1.0, decay=0, epsilon=1e-7):
         self.epsilon = epsilon
         self.learning_rate = learning_rate
@@ -75,7 +75,7 @@ class Optimizer_Adagrad:
 
 # -----------------------------------------------------------------------------------------------------------------------
 
-class Optimizer_RMSProp:
+class OptimizerRMSProp:
     def __init__(self, learning_rate=1.0, decay=0, epsilon=1e-7, rho=0.9):
         self.epsilon = epsilon
         self.rho = rho
@@ -105,7 +105,7 @@ class Optimizer_RMSProp:
 
 # -----------------------------------------------------------------------------------------------------------------------
 
-class Optimizer_Adam():
+class OptimizerAdam:
     def __init__(self, learning_rate=0.001, decay=0, epsilon=1e-7, beta_1=0.9, beta_2=0.999):
         self.learning_rate = learning_rate
         self.current_lr = learning_rate

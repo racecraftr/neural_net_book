@@ -1,6 +1,10 @@
 # from nnfs.datasets import sine_data, spiral_data
+import nnfs
+from nnfs.datasets import spiral_data
+
 from ops.activation import *
-from ops.loss import *
+from ops.layer import Layer_Dropout
+from ops.loss import LossCatCrossEntropy
 from model.model import Model
 from ops.optimizer import *
 from ops.accuracy import AccuracyCategorical
@@ -20,7 +24,7 @@ model.add(ActivationSoftmax())
 
 model.set(
     loss=LossCatCrossEntropy(),
-    optimizer=Optimizer_Adam(learning_rate=0.05, decay=5e-5),
+    optimizer=OptimizerAdam(learning_rate=0.05, decay=5e-5),
     acc=AccuracyCategorical()
 )
 

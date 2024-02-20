@@ -1,8 +1,9 @@
 import time
-
 import matplotlib.pyplot as plt
+import nnfs
+
 from nnfs.datasets import sine_data
-from ops.activation import *
+from ops.activation import ActivationReLU, ActivationLinear
 from ops.loss import *
 from ops.optimizer import *
 
@@ -23,7 +24,7 @@ dense3 = LayerDense(64, 1)
 activation3 = ActivationLinear()
 
 loss_function = LossMSE()
-optimizer = Optimizer_Adam(learning_rate=0.005, decay=1e-3)
+optimizer = OptimizerAdam(learning_rate=0.005, decay=1e-3)
 acc_precision = np.std(y) / 250
 
 # optimizer = Optimizer_SDG(decay=1e-3, momentum=0.8)
@@ -32,15 +33,15 @@ t1 = time.time()
 
 for epoch in range(10001):
     # forward pass
-    dense1.forward(X)
-    activation1.forward(dense1.output)
-    dense2.forward(activation1.output)
-    activation2.forward(dense2.output)
-    dense3.forward(activation2.output)
-    activation3.forward(dense3.output)
+    dense1.forward(X, training=True)
+    activation1.forward(dense1.output, training=True)
+    dense2.forward(activation1.output, training=True)
+    activation2.forward(dense2.output, training=True)
+    dense3.forward(activation2.output, training=True)
+    activation3.forward(dense3.output, training=True)
 
     data_loss = loss_function.calculate(activation3.output, y)
-    reg_loss = loss_function.reg_loss(dense1) + loss_function.reg_loss(dense2) + loss_function.reg_loss(dense3)
+    reg_loss = loss_function.reg_loss() + loss_function.reg_loss() + loss_function.reg_loss()
 
     loss = data_loss + reg_loss
     # print(loss_activation.output[5])
@@ -82,12 +83,12 @@ print('training time:', t2-t1)
 X_test, y_test = sine_data()
 # y_test = y_test.reshape(-1, 1)
 
-dense1.forward(X_test)
-activation1.forward(dense1.output)
-dense2.forward(activation1.output)
-activation2.forward(dense2.output)
-dense3.forward(activation2.output)
-activation3.forward(dense3.output)
+dense1.forward(X_test, training=False)
+activation1.forward(dense1.output, training=False)
+dense2.forward(activation1.output, training=False)
+activation2.forward(dense2.output, training=False)
+dense3.forward(activation2.output, training=False)
+activation3.forward(dense3.output, training=False)
 
 plt.plot(X_test, y_test)
 plt.plot(X_test, activation3.output)
